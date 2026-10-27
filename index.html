@@ -199,7 +199,16 @@ function driveIds(cell) {
   });
   return out;
 }
-const thumb = (id, w) => `https://drive.google.com/thumbnail?id=${id}&sz=w${w}`;
+const srcs = (id, w) => [
+  `https://lh3.googleusercontent.com/d/${id}=w${w}`,
+  `https://drive.google.com/thumbnail?id=${id}&sz=w${w}`,
+  `https://drive.google.com/uc?export=view&id=${id}`
+];
+function loadChain(img, id, w, onfail) {
+  const list = srcs(id, w); let i = 0;
+  img.onerror = () => { i++; if (i < list.length) img.src = list[i]; else onfail(); };
+  img.src = list[0];
+}
 const viewUrl = id => `https://drive.google.com/file/d/${id}/view`;
 
 let H = [], R = [], imgCols = new Set(), view = "cards";
@@ -208,26 +217,27 @@ function analyse(rows) {
   H = rows[0].map(h => h.trim()); R = rows.slice(1); imgCols = new Set();
   H.forEach((_, c) => {
     const hits = R.filter(r => driveIds(r[c] || "").length).length;
-    if (hits && hits >= R.length * 0.3) imgCols.add(c);
+    if (hits) imgCols.add(c);
   });
 }
 
 function mkImg(id, w, cls) {
   const img = document.createElement("img");
   img.loading = "lazy"; img.referrerPolicy = "no-referrer"; img.alt = "Photo from Drive";
-  img.src = thumb(id, w);
-  img.onerror = () => {
+  loadChain(img, id, w, () => {
     const d = document.createElement("div"); d.className = "noimg";
-    d.textContent = "Photo not available. Tap to open in Drive.";
+    const a = document.createElement("a"); a.href = viewUrl(id); a.target = "_blank"; a.rel = "noopener noreferrer";
+    a.textContent = "Photo is private. Tap to open in Drive";
+    a.onclick = e => e.stopPropagation(); d.appendChild(a);
     img.replaceWith(d);
-  };
+  });
   return img;
 }
 
 function openLB(id) {
-  $("lbImg").src = thumb(id, 1600); $("lbOpen").href = viewUrl(id); $("lb").hidden = false;
+  const im = $("lbImg"); im.removeAttribute("src"); loadChain(im, id, 1600, () => {}); $("lbOpen").href = viewUrl(id); $("lb").hidden = false;
 }
-$("lbClose").onclick = () => { $("lb").hidden = true; $("lbImg").src = ""; };
+$("lbClose").onclick = () => { $("lb").hidden = true; $("lbImg").onerror = null; $("lbImg").removeAttribute("src"); };
 $("lb").addEventListener("click", e => { if (e.target === $("lb")) $("lbClose").click(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") $("lbClose").click(); });
 
@@ -339,4 +349,4 @@ $("refresh").onclick = loadCSV;
 $("search").addEventListener("input", render);
 </script>
 </body>
-                         </html>
+</html>
