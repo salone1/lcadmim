@@ -59,7 +59,7 @@ const status=t=>{$("#sync").textContent=t};
 /* login */
 $("#lf").onsubmit=async e=>{e.preventDefault();const p=$("#pw").value;if(!CFG.UI_HASH){$("#setup").textContent="FIRST-TIME SETUP\nPaste into admin.html as UI_HASH:\n"+await sha("ui:"+p)+"\n\nPaste into Code.gs as API_HASH:\n"+await sha("api:"+p);return}
 if(await sha("ui:"+p)!==CFG.UI_HASH){$("#err").textContent="Wrong passphrase";return}KEY=await sha("api:"+p);sessionStorage.setItem("lc_k",KEY);enter()};
-if(CFG.GOOGLE_CLIENT_ID){const g=document.createElement("script");g.src="https://accounts.google.com/gsi/client";g.onload=()=>{google.accounts.id.initialize({client_id:CFG.GOOGLE_CLIENT_ID,callback:r=>{KEY="g:"+r.credential;sessionStorage.setItem("lc_k",KEY);enter()}});google.accounts.id.renderButton($("#gbtn"),{theme:"outline",size:"large"})};document.head.appendChild(g)}
+if(317204988789-vsh6i5hpuhkf7cgddthsuqs4tuvtq0g0.apps.googleusercontent.com){const g=document.createElement("script");g.src="https://accounts.google.com/gsi/client";g.onload=()=>{google.accounts.id.initialize({client_id:317204988789-vsh6i5hpuhkf7cgddthsuqs4tuvtq0g0.apps.googleusercontent.com,callback:r=>{KEY="g:"+r.credential;sessionStorage.setItem("lc_k",KEY);enter()}});google.accounts.id.renderButton($("#gbtn"),{theme:"outline",size:"large"})};document.head.appendChild(g)}
 $("#out").onclick=()=>{sessionStorage.clear();location.reload()};
 const TABS=[["home","Home"],["bill","New bill"],["prod","Products"],["pay","Payments"],["prof","Profile"]];
 $("#nav").innerHTML=TABS.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("");
