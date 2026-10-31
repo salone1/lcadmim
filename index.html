@@ -1,352 +1,109 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="color-scheme" content="light">
-<meta name="robots" content="noindex,nofollow">
-<meta name="referrer" content="no-referrer">
-<title>Lone Crafts · Admin</title>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Lone Crafts Admin</title>
 <style>
-:root{--ink:#1d2420;--muted:#6b736c;--paper:#f4f2ec;--card:#fff;--line:#e4e2d9;--green:#1f4a39;--green2:#dfeae2;--gold:#b98a3a;--red:#a23d35;--shadow:0 10px 30px #1c2c2012}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-button,input{font:inherit}button,a{cursor:pointer}a{color:inherit}
-.shell{max-width:1120px;margin:auto;padding:max(18px,env(safe-area-inset-top)) 16px 48px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:26px}
-.brand{display:flex;align-items:center;gap:12px}
-.mark{width:42px;height:42px;border-radius:13px;background:var(--green);color:#fff;display:grid;place-items:center;font:22px Georgia,serif}
-.brand h1{font:600 18px Georgia,serif;margin:0}.brand p{margin:1px 0 0;color:var(--muted);font-size:12px}
-.btn{border:0;border-radius:12px;background:var(--green);color:#fff;padding:12px 16px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:650;min-height:44px}
-.btn.secondary{background:#ebece5;color:var(--ink)}.btn.small{padding:8px 12px;min-height:38px;font-size:14px}
-.btn:focus-visible,input:focus-visible,.seg button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.hero h2{font:500 clamp(28px,6vw,42px)/1.15 Georgia,serif;margin:0 0 6px}.hero p{color:var(--muted);margin:0;max-width:560px}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
-.card h3{font-size:18px;margin:0}.card p{margin:0;color:var(--muted);font-size:14px}.card .btn{margin-top:14px;align-self:flex-start}
-.card.accent{background:var(--green);color:#fff;border-color:var(--green)}.card.accent p{color:#cfe0d5}.card.accent .btn{background:#fff;color:var(--green)}
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:120px}
-.stat b{display:block;font:600 22px Georgia,serif}.stat span{font-size:12px;color:var(--muted)}
-.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
-.bar input[type=search]{flex:1;min-width:180px;border:1px solid var(--line);border-radius:12px;padding:11px 14px;background:#fff;min-height:44px}
-.seg{display:flex;background:#e9e8e0;border-radius:12px;padding:3px}
-.seg button{border:0;background:none;padding:8px 14px;border-radius:9px;font-weight:600;color:var(--muted);min-height:38px}
-.seg button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px #0002}
-.status{color:var(--muted);font-size:13px;margin:4px 2px 12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
-.rec{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
-.gal{display:flex;gap:2px;overflow-x:auto;scroll-snap-type:x mandatory;background:#ece9df}
-.gal button{flex:0 0 100%;scroll-snap-align:center;border:0;padding:0;background:none;aspect-ratio:4/3}
-.gal.multi button{flex-basis:88%}
-.gal img{width:100%;height:100%;object-fit:cover;display:block}
-.noimg{aspect-ratio:4/3;display:grid;place-items:center;background:#ece9df;color:var(--muted);font-size:13px;text-align:center;padding:10px;width:100%;height:100%}
-.rec-body{padding:14px 16px 16px}
-.rec h4{font:600 17px/1.3 Georgia,serif;margin:0 0 8px;overflow-wrap:anywhere}
-.kv{display:grid;grid-template-columns:minmax(80px,38%) 1fr;gap:4px 10px;font-size:13px;margin:0}
-.kv dt{color:var(--muted)}.kv dd{margin:0;overflow-wrap:anywhere}
-.table-wrap{overflow:auto;max-height:70vh;background:#fff;border:1px solid var(--line);border-radius:16px}
-table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{text-align:left;padding:10px 13px;border-bottom:1px solid #eeede6;max-width:300px;vertical-align:middle}
-td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-th{background:#f7f6f1;color:#5b645c;position:sticky;top:0;z-index:1;white-space:nowrap}
-td .thumbs{display:flex;gap:4px}td .thumbs img{width:44px;height:44px;border-radius:8px;object-fit:cover;display:block}
-.empty{padding:40px 16px;text-align:center;color:var(--muted)}
-.notice{margin-top:24px;border:1px solid #ead9b4;background:#fffaf0;padding:12px 14px;border-radius:14px;color:#6e5627;font-size:12.5px}
-.foot{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:12px}
-#lb{position:fixed;inset:0;background:#000d;z-index:30;display:grid;place-items:center;padding:16px}
-#lb[hidden]{display:none}#lb img{max-width:100%;max-height:82vh;border-radius:12px}
-#lb .x{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px}
-#lb a{position:absolute;bottom:max(16px,env(safe-area-inset-bottom))}
-#login{position:fixed;inset:0;background:var(--paper);z-index:20;display:grid;place-items:center;padding:20px}
-#login[hidden]{display:none!important}
-.loginbox{width:min(400px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:var(--shadow)}
-.loginbox .mark{margin-bottom:18px}.loginbox h2{font:500 28px Georgia,serif;margin:0 0 6px}.loginbox p{color:var(--muted);font-size:14px;margin:0}
-.loginbox label{display:block;font-size:13px;font-weight:700;margin:20px 0 7px}
-.loginbox input{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;min-height:46px}
-.loginbox .btn{width:100%;margin-top:12px}.error{color:var(--red)!important;min-height:20px;font-size:13px!important;margin-top:8px!important}
-[hidden]{display:none!important}
-@media(max-width:680px){.cards{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:no-preference){.gal{scroll-behavior:smooth}}
-</style>
-</head>
-<body>
-<div id="login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-  <div class="loginbox">
-    <div class="mark">L</div>
-    <h2 id="loginTitle">Lone Crafts admin</h2>
-    <p>Enter your access phrase to continue.</p>
-    <form id="loginForm">
-      <label for="pass">Access phrase</label>
-      <input id="pass" type="password" autocomplete="current-password" required autofocus placeholder="Access phrase">
-      <button class="btn" type="submit" id="loginBtn">Open admin panel</button>
-      <p class="error" id="loginError" aria-live="polite"></p>
-    </form>
-  </div>
-</div>
-
-<div class="shell" id="app" hidden>
-  <header class="top">
-    <div class="brand"><div class="mark">L</div><div><h1>Lone Crafts</h1><p>Admin panel</p></div></div>
-    <button class="btn secondary small" id="logout">Lock</button>
-  </header>
-
-  <section class="hero">
-    <h2>Products and payments, in one place.</h2>
-    <p>Add new products, or check the payments that came in with their photos.</p>
-  </section>
-
-  <section class="cards" aria-label="Admin actions">
-    <article class="card accent">
-      <h3>Add a product</h3>
-      <p>Fill in the product form to list something new on Lone Crafts.</p>
-      <a class="btn" href="https://forms.gle/2zDtkswPH1f8fDqz5" target="_blank" rel="noopener noreferrer">Open product form</a>
-    </article>
-    <article class="card">
-      <h3>Payments received</h3>
-      <p>Records load below from your published sheet. Photos come from Google Drive.</p>
-      <a class="btn secondary" id="csvLink" target="_blank" rel="noopener noreferrer">Open raw CSV</a>
-    </article>
-  </section>
-
-  <section id="payments" aria-label="Payment records">
-    <div class="stats" id="stats" hidden></div>
-    <div class="bar">
-      <input id="search" type="search" placeholder="Search records" aria-label="Search payment records">
-      <div class="seg" role="group" aria-label="View">
-        <button id="vCards" aria-pressed="true">Cards</button>
-        <button id="vTable" aria-pressed="false">Table</button>
-      </div>
-      <button class="btn small" id="refresh">Refresh</button>
-    </div>
-    <div class="status" id="status" aria-live="polite">Loading records…</div>
-    <div id="out"></div>
-  </section>
-
-  <div class="notice"><strong>Note:</strong> the access phrase is checked in your browser and stored only as a salted hash. It keeps casual visitors out, but the published CSV link is public to anyone who has it, so keep sensitive details out of that sheet.</div>
-  <footer class="foot"><span>Lone Crafts · Personal use</span></footer>
-</div>
-
-<div id="lb" hidden role="dialog" aria-label="Photo"><button class="btn secondary small x" id="lbClose">Close</button><img id="lbImg" alt=""><a class="btn small" id="lbOpen" target="_blank" rel="noopener noreferrer">Open in Drive</a></div>
-
+:root{--c:#4b2e5a;--s:#d98e04;--r:#a63a1f;--bg:#f6f4f8;--l:#ddd6e3;--g:#1faa59;--ink:#1e1a24}
+*{box-sizing:border-box;margin:0}body{font:15px/1.5 system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}input,select,textarea{width:100%;padding:10px;border:1.5px solid var(--l);border-radius:8px;background:#fff}
+button{cursor:pointer;border:0;border-radius:20px;padding:10px 16px;font-weight:700;background:var(--c);color:#fff}
+.o{background:#fff;color:var(--c);border:1.5px solid var(--c)}.g{background:var(--g)}.rd{background:var(--r)}
+header{background:var(--c);color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;background:#fff;border-bottom:1px solid var(--l);position:sticky;top:52px;z-index:4}
+nav button{flex:none;background:#fff;color:var(--ink);border:1.5px solid var(--l);padding:8px 14px}nav .on{background:var(--c);color:#fff;border-color:var(--c)}
+main{max-width:900px;margin:auto;padding:14px}.card{background:#fff;border:1px solid var(--l);border-radius:12px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.st b{display:block;font-size:1.35rem;color:var(--c)}
+label{font-size:.75rem;font-weight:700;color:#6b6475;display:block;margin-top:6px}h3{margin-bottom:6px}
+.it{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:6px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--l)}.it .d{grid-column:1/-1}
+.row{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--l)}.row img{width:56px;height:56px;object-fit:cover;border-radius:8px;background:var(--l)}.row>div{flex:1;min-width:0}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.bar input{flex:1;min-width:140px}.tag{font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--l)}
+#iv{position:fixed;inset:0;background:#fff;z-index:20;overflow:auto;padding:12px}.sheet{max-width:720px;margin:auto;font-size:13px}.sheet table{width:100%;border-collapse:collapse;margin:8px 0}.sheet td,.sheet th{border:1px solid #999;padding:4px 6px;text-align:left}
+@media print{body>*:not(#iv){display:none!important}#iv .no{display:none}#iv{position:static;padding:0}}
+</style></head><body>
+<div id="lock" style="max-width:380px;margin:12vh auto;padding:18px"><div class="card"><h2>Lone Crafts Admin</h2>
+<form id="lf"><label>Passphrase</label><input id="pw" type="password" autocomplete="current-password"><p id="err" style="color:var(--r)"></p><button style="width:100%;margin-top:8px">Unlock</button></form>
+<div id="gbtn" style="margin-top:12px"></div><pre id="setup" style="white-space:pre-wrap;word-break:break-all;font-size:.75rem;margin-top:10px"></pre></div></div>
+<div id="app" hidden>
+<header><b>Lone Crafts Admin</b><span><small id="sync"></small> <button class="o" id="out">Lock</button></span></header><nav id="nav"></nav>
+<main>
+<section id="t-home"><div class="grid" id="stats"></div><div class="card" style="margin-top:12px"><h3>Recent bills</h3><div id="recent"></div></div></section>
+<section id="t-bill" hidden><div class="card"><h3>Customer</h3>
+<label>Name</label><input id="cn"><label>Phone (WhatsApp)</label><input id="cp" type="tel"><label>Address</label><textarea id="ca" rows="2"></textarea>
+<label>GSTIN (optional)</label><input id="cg"><label>State</label><input id="cs" placeholder="e.g. Jammu and Kashmir"><label>Date</label><input id="dt" type="date">
+<label><input id="inter" type="checkbox" style="width:auto"> Other state (use IGST)</label></div>
+<div class="card"><h3>Items</h3><datalist id="pl"></datalist><div id="items"></div><button class="o" id="addI">+ Add item</button>
+<label>Discount (₹ on whole bill)</label><input id="disc" type="number" min="0" value="0"></div>
+<div class="card" id="tot"></div><div class="bar"><button class="o" id="prev">Preview</button><button class="g" id="save">Save bill</button></div></section>
+<section id="t-prod" hidden><div class="bar"><input id="ps" type="search" placeholder="Search products"><button id="addP">+ Add product</button><button class="o" id="rP">Refresh</button></div><div class="card" id="plist"></div></section>
+<section id="t-pay" hidden><div class="bar"><input id="ys" type="search" placeholder="Search by bill number"><button class="o" id="rY">Refresh</button></div><div class="card" id="paylist"></div></section>
+<section id="t-prof" hidden><div class="card"><h3>Business profile</h3><p style="font-size:.85rem;color:#6b6475">Enter once. It fills every new bill and you can edit it any time.</p><div id="pf"></div><button id="sp" style="margin-top:10px">Save profile</button></div></section>
+</main></div>
+<div id="iv" hidden><div class="no bar"><button class="o" id="ivx">Close</button><button id="ivp">Print / Save PDF</button><button class="g" id="ivw">Send on WhatsApp</button></div><div id="ivb" class="sheet"></div></div>
 <script>
-/* Access phrase is stored as a salted PBKDF2-SHA256 hash (200,000 rounds), not as plain text.
-   This is still a browser-side lock, not server authentication. */
-const SALT_HEX = "9604ca0c193816307324b90e68c6e1c4";
-const HASH_HEX = "9995f43b3d530006a378ac9eda9954532736555c946e59a7bc904b719c1ef35a";
-const ITER = 200000;
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTcYwDirPI_IVO9iBd5q9Q1wJ_Z9Da5PtgO5JNfa_8rBe6Z2vX-InUJWFoifHBjcA3Xp-i_OnzdoTj4/pub?gid=1427022829&single=true&output=csv";
-
-const $ = id => document.getElementById(id);
-const hex2buf = h => Uint8Array.from(h.match(/../g).map(b => parseInt(b, 16)));
-const buf2hex = b => [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
-$("csvLink").href = CSV_URL;
-
-async function hashPhrase(p) {
-  if (!window.crypto || !crypto.subtle) throw new Error("Open this page over https to unlock.");
-  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(p), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: hex2buf(SALT_HEX), iterations: ITER }, key, 256);
-  return buf2hex(bits);
-}
-
-let fails = 0, lockUntil = 0, loaded = false;
-$("loginForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  const err = $("loginError"), btn = $("loginBtn");
-  const wait = Math.ceil((lockUntil - Date.now()) / 1000);
-  if (wait > 0) { err.textContent = `Too many tries. Wait ${wait}s.`; return; }
-  btn.disabled = true; err.textContent = "";
-  try {
-    const h = await hashPhrase($("pass").value);
-    if (h === HASH_HEX) {
-      fails = 0; $("login").hidden = true; $("app").hidden = false; $("pass").value = "";
-      if (!loaded) loadCSV();
-    } else {
-      fails++; $("pass").value = "";
-      if (fails >= 5) { lockUntil = Date.now() + 30000; fails = 0; err.textContent = "Too many tries. Wait 30s."; }
-      else err.textContent = "Access phrase not recognised.";
-    }
-  } catch (x) { err.textContent = x.message; }
-  btn.disabled = false;
-});
-$("logout").addEventListener("click", () => { $("app").hidden = true; $("login").hidden = false; $("pass").focus(); });
-
-/* ---------- CSV ---------- */
-function parseCSV(text) {
-  const rows = []; let row = [], cell = "", q = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i], n = text[i + 1];
-    if (c === '"' && q && n === '"') { cell += '"'; i++; }
-    else if (c === '"') q = !q;
-    else if (c === ',' && !q) { row.push(cell); cell = ""; }
-    else if ((c === '\n' || c === '\r') && !q) {
-      if (c === '\r' && n === '\n') i++;
-      row.push(cell); if (row.some(v => v.trim() !== "")) rows.push(row);
-      row = []; cell = "";
-    } else cell += c;
-  }
-  if (cell.length || row.length) { row.push(cell); if (row.some(v => v.trim() !== "")) rows.push(row); }
-  return rows;
-}
-
-/* ---------- Drive images ---------- */
-const DRIVE_RE = /https?:\/\/(?:drive|docs)\.google\.com\/[^\s,;"]*/g;
-function driveIds(cell) {
-  const out = [];
-  (cell.match(DRIVE_RE) || []).forEach(u => {
-    const m = u.match(/[?&]id=([\w-]{15,})/) || u.match(/\/d\/([\w-]{15,})/);
-    if (m && !out.includes(m[1])) out.push(m[1]);
-  });
-  return out;
-}
-const srcs = (id, w) => [
-  `https://lh3.googleusercontent.com/d/${id}=w${w}`,
-  `https://drive.google.com/thumbnail?id=${id}&sz=w${w}`,
-  `https://drive.google.com/uc?export=view&id=${id}`
-];
-function loadChain(img, id, w, onfail) {
-  const list = srcs(id, w); let i = 0;
-  img.onerror = () => { i++; if (i < list.length) img.src = list[i]; else onfail(); };
-  img.src = list[0];
-}
-const viewUrl = id => `https://drive.google.com/file/d/${id}/view`;
-
-let H = [], R = [], imgCols = new Set(), view = "cards";
-
-function analyse(rows) {
-  H = rows[0].map(h => h.trim()); R = rows.slice(1); imgCols = new Set();
-  H.forEach((_, c) => {
-    const hits = R.filter(r => driveIds(r[c] || "").length).length;
-    if (hits) imgCols.add(c);
-  });
-}
-
-function mkImg(id, w, cls) {
-  const img = document.createElement("img");
-  img.loading = "lazy"; img.referrerPolicy = "no-referrer"; img.alt = "Photo from Drive";
-  loadChain(img, id, w, () => {
-    const d = document.createElement("div"); d.className = "noimg";
-    const a = document.createElement("a"); a.href = viewUrl(id); a.target = "_blank"; a.rel = "noopener noreferrer";
-    a.textContent = "Photo is private. Tap to open in Drive";
-    a.onclick = e => e.stopPropagation(); d.appendChild(a);
-    img.replaceWith(d);
-  });
-  return img;
-}
-
-function openLB(id) {
-  const im = $("lbImg"); im.removeAttribute("src"); loadChain(im, id, 1600, () => {}); $("lbOpen").href = viewUrl(id); $("lb").hidden = false;
-}
-$("lbClose").onclick = () => { $("lb").hidden = true; $("lbImg").onerror = null; $("lbImg").removeAttribute("src"); };
-$("lb").addEventListener("click", e => { if (e.target === $("lb")) $("lbClose").click(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") $("lbClose").click(); });
-
-function rowIds(r) { return [...imgCols].flatMap(c => driveIds(r[c] || "")); }
-function isTime(h) { return /timestamp|time stamp/i.test(h); }
-
-function titleCol() {
-  for (let c = 0; c < H.length; c++) if (!imgCols.has(c) && !isTime(H[c]) && R.some(r => (r[c] || "").trim())) return c;
-  return -1;
-}
-
-function filtered() {
-  const q = $("search").value.trim().toLowerCase();
-  return q ? R.filter(r => r.some(c => c.toLowerCase().includes(q))) : R;
-}
-
-function renderCards(rows) {
-  const tc = titleCol(), grid = document.createElement("div"); grid.className = "grid";
-  rows.slice().reverse().forEach(r => {
-    const art = document.createElement("article"); art.className = "rec";
-    const ids = rowIds(r);
-    const gal = document.createElement("div"); gal.className = "gal" + (ids.length > 1 ? " multi" : "");
-    if (ids.length) ids.forEach(id => {
-      const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", "View photo");
-      b.appendChild(mkImg(id, 600)); b.onclick = () => openLB(id); gal.appendChild(b);
-    });
-    else { const d = document.createElement("div"); d.className = "noimg"; d.textContent = "No photo"; gal.appendChild(d); }
-    art.appendChild(gal);
-    const body = document.createElement("div"); body.className = "rec-body";
-    const h = document.createElement("h4"); h.textContent = tc >= 0 ? (r[tc] || "Record") : "Record"; body.appendChild(h);
-    const dl = document.createElement("dl"); dl.className = "kv";
-    H.forEach((name, c) => {
-      const v = (r[c] || "").trim();
-      if (!v || imgCols.has(c) || c === tc) return;
-      const dt = document.createElement("dt"); dt.textContent = name;
-      const dd = document.createElement("dd");
-      if (/^https?:\/\//.test(v)) { const a = document.createElement("a"); a.href = v; a.target = "_blank"; a.rel = "noopener noreferrer"; a.textContent = "Open link"; dd.appendChild(a); }
-      else dd.textContent = v;
-      dl.append(dt, dd);
-    });
-    body.appendChild(dl); art.appendChild(body); grid.appendChild(art);
-  });
-  return grid;
-}
-
-function renderTable(rows) {
-  const wrap = document.createElement("div"); wrap.className = "table-wrap";
-  const t = document.createElement("table"), hd = document.createElement("tr");
-  H.forEach(h => { const th = document.createElement("th"); th.textContent = h; hd.appendChild(th); });
-  const thead = document.createElement("thead"); thead.appendChild(hd); t.appendChild(thead);
-  const tb = document.createElement("tbody");
-  rows.slice().reverse().forEach(r => {
-    const tr = document.createElement("tr");
-    H.forEach((_, c) => {
-      const td = document.createElement("td"), v = r[c] || "";
-      if (imgCols.has(c)) {
-        const box = document.createElement("div"); box.className = "thumbs";
-        driveIds(v).forEach(id => { const b = document.createElement("button"); b.style.cssText = "border:0;padding:0;background:none"; b.appendChild(mkImg(id, 120)); b.onclick = () => openLB(id); box.appendChild(b); });
-        td.appendChild(box);
-      } else { td.textContent = v; td.title = v; }
-      tr.appendChild(td);
-    });
-    tb.appendChild(tr);
-  });
-  t.appendChild(tb); wrap.appendChild(t); return wrap;
-}
-
-function renderStats() {
-  const s = $("stats"); s.replaceChildren();
-  const add = (n, l) => { const d = document.createElement("div"); d.className = "stat"; d.innerHTML = "<b></b><span></span>"; d.firstChild.textContent = n; d.lastChild.textContent = l; s.appendChild(d); };
-  add(R.length, "Total records");
-  const ac = H.findIndex(h => /amount|paid|price|total/i.test(h));
-  if (ac >= 0) {
-    const nums = R.map(r => parseFloat((r[ac] || "").replace(/[^\d.\-]/g, ""))).filter(n => !isNaN(n));
-    if (nums.length) add(nums.reduce((a, b) => a + b, 0).toLocaleString("en-IN"), "Sum of " + H[ac]);
-  }
-  s.hidden = false;
-}
-
-function render() {
-  if (!R.length && !H.length) return;
-  const rows = filtered(), out = $("out"); out.replaceChildren();
-  $("status").textContent = `Showing ${rows.length} of ${R.length} record(s)`;
-  if (!rows.length) { const d = document.createElement("div"); d.className = "empty"; d.textContent = "No records match your search."; out.appendChild(d); return; }
-  out.appendChild(view === "cards" ? renderCards(rows) : renderTable(rows));
-}
-
-async function loadCSV() {
-  const st = $("status"); st.textContent = "Loading records…";
-  try {
-    const res = await fetch(CSV_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const text = await res.text();
-    if (/^\s*</.test(text)) throw new Error("The published URL did not return CSV data.");
-    const rows = parseCSV(text);
-    if (!rows.length) throw new Error("The spreadsheet is empty.");
-    analyse(rows); loaded = true; renderStats(); render();
-  } catch (e) {
-    st.textContent = "Could not load records. Tap “Open raw CSV” instead. (" + e.message + ")";
-  }
-}
-
-function setView(v) {
-  view = v; $("vCards").setAttribute("aria-pressed", v === "cards"); $("vTable").setAttribute("aria-pressed", v === "table"); render();
-}
-$("vCards").onclick = () => setView("cards");
-$("vTable").onclick = () => setView("table");
-$("refresh").onclick = loadCSV;
-$("search").addEventListener("input", render);
-</script>
-</body>
-</html>
+/* ===== EDIT THESE (see Code.gs for setup steps) ===== */
+const CFG={API:"",GOOGLE_CLIENT_ID:"",PRODUCT_FORM:"https://forms.gle/2zDtkswPH1f8fDqz5",
+PRODUCTS_CSV:"https://docs.google.com/spreadsheets/d/e/2PACX-1vR-JzRVAFn6o-3a1jyLlQV2az4yY2cOYSN8XH9ofBq0rkT2YQzS249HcTIUn6KN19mQSTvr_UkFHfJt/pub?output=csv",
+PAYMENTS_CSV:"https://docs.google.com/spreadsheets/d/1z2oh4VZC_JlcGIUp0AI_p6OIsRfTaCous-4kEFL_s8o/gviz/tq?tqx=out:csv",UI_HASH:"c23b4e81d2862fd5d6ec938051a847d6f3a3cf74e3ba3e60e24e4fbd7dfe2814"};
+/* ==================================================== */
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ls=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const sha=async t=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,"0")).join("");
+const m=n=>"₹"+(+n||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2}),wa=n=>{n=String(n||"").replace(/\D/g,"");return n.length===10?"91"+n:n};
+let KEY="",profile=ls("lc_prof",{}),bills=ls("lc_bills",[]),products=[],pay=[],items=[],cur=null;
+const FIELDS=[["bn","Business name"],["ba","Address"],["bp","Phone"],["be","Email"],["bg","GSTIN"],["bs","State"],["bb","Bank / UPI details"],["bx","Bill prefix (e.g. LC)"],["bd","Default GST % (e.g. 5)"],["bt","Terms (printed on bill)"]];
+function words(n){const a="One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen".split(" "),b="_ _ Twenty Thirty Forty Fifty Sixty Seventy Eighty Ninety".split(" "),t=n=>n<20?a[n-1]||"":b[n/10|0]+(n%10?" "+a[n%10-1]:""),h=n=>(n>99?a[(n/100|0)-1]+" Hundred"+(n%100?" ":""):"")+t(n%100);let s="";const cr=n/1e7|0,lk=(n/1e5|0)%100,th=(n/1e3|0)%100,r=n%1000;if(cr)s+=t(cr)+" Crore ";if(lk)s+=t(lk)+" Lakh ";if(th)s+=t(th)+" Thousand ";if(r)s+=h(r);return(s.trim()||"Zero")+" Rupees Only"}
+function csv(t){const R=[];let r=[],f="",q=0;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c=='"'){t[i+1]=='"'?(f+='"',i++):q=0}else f+=c}else if(c=='"')q=1;else if(c==','){r.push(f);f=""}else if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;r.push(f);R.push(r);r=[];f=""}else f+=c}if(f||r.length){r.push(f);R.push(r)}return R.filter(x=>x.some(y=>y.trim()))}
+async function sheet(u){const R=csv(await(await fetch(u,{cache:"no-cache"})).text());if(R.length<1)throw new Error("empty sheet");const h=R[0].map(x=>x.trim().toLowerCase());return{rows:R.slice(1),col:(...k)=>h.findIndex(x=>k.some(y=>x.includes(y)))}}
+const first=u=>(u||"").split(/[\s,]+/)[0],dr=u=>{u=first(u);const x=u.match(/(?:file\/d\/|id=)([\w-]+)/);return x?"https://drive.google.com/thumbnail?id="+x[1]+"&sz=w600":u};
+async function api(a,d={}){if(!CFG.API)return null;const r=await fetch(CFG.API,{method:"POST",body:JSON.stringify({key:KEY,action:a,...d})}),j=await r.json();if(j.error)throw new Error(j.error);return j}
+const status=t=>{$("#sync").textContent=t};
+/* login */
+$("#lf").onsubmit=async e=>{e.preventDefault();const p=$("#pw").value;if(!CFG.UI_HASH){$("#setup").textContent="FIRST-TIME SETUP\nPaste into admin.html as UI_HASH:\n"+await sha("ui:"+p)+"\n\nPaste into Code.gs as API_HASH:\n"+await sha("api:"+p);return}
+if(await sha("ui:"+p)!==CFG.UI_HASH){$("#err").textContent="Wrong passphrase";return}KEY=await sha("api:"+p);sessionStorage.setItem("lc_k",KEY);enter()};
+if(CFG.GOOGLE_CLIENT_ID){const g=document.createElement("script");g.src="https://accounts.google.com/gsi/client";g.onload=()=>{google.accounts.id.initialize({client_id:CFG.GOOGLE_CLIENT_ID,callback:r=>{KEY="g:"+r.credential;sessionStorage.setItem("lc_k",KEY);enter()}});google.accounts.id.renderButton($("#gbtn"),{theme:"outline",size:"large"})};document.head.appendChild(g)}
+$("#out").onclick=()=>{sessionStorage.clear();location.reload()};
+const TABS=[["home","Home"],["bill","New bill"],["prod","Products"],["pay","Payments"],["prof","Profile"]];
+$("#nav").innerHTML=TABS.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("");
+function show(t){TABS.forEach(x=>{$("#t-"+x[0]).hidden=x[0]!==t});document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));if(t==="home")home();if(t==="bill"&&!cur)newBill()}
+$("#nav").onclick=e=>{if(e.target.dataset.t)show(e.target.dataset.t)};
+async function enter(){$("#lock").hidden=true;$("#app").hidden=false;$("#pf").innerHTML=FIELDS.map(f=>`<label>${f[1]}</label><input id="f_${f[0]}" value="${esc(profile[f[0]])}">`).join("");show(profile.bn?"home":"prof");
+try{status("Syncing…");const d=await api("get");if(d){if(d.profile&&d.profile.bn)profile=d.profile;bills=d.bills||bills;sv("lc_prof",profile);sv("lc_bills",bills);FIELDS.forEach(f=>$("#f_"+f[0]).value=profile[f[0]]||"");status("Synced")}else status("Saving on this phone only")}catch(e){if(e.message==="Not allowed"){sessionStorage.clear();alert("Not allowed. Sign in again.");location.reload();return}status("Sync failed: "+e.message)}
+home();loadProducts();loadPay()}
+/* home */
+function home(){const mo=new Date().toISOString().slice(0,7),tot=bills.reduce((s,b)=>s+b.total,0),mt=bills.filter(b=>(b.date||"").startsWith(mo)).reduce((s,b)=>s+b.total,0),rec=pay.reduce((s,p)=>s+p.amt,0);
+$("#stats").innerHTML=[["Bills",bills.length],["Total billed",m(tot)],["This month",m(mt)],["Payments logged",m(rec)],["Products",products.length]].map(x=>`<div class="card st" style="margin:0"><small>${x[0]}</small><b>${x[1]}</b></div>`).join("");
+$("#recent").innerHTML=bills.length?bills.slice(-8).reverse().map(b=>`<div class="row"><div><b>${esc(b.no)}</b> · ${esc(b.cust.name)}<br><small>${esc(b.date)} · ${m(b.total)}</small></div><button class="o" data-v="${esc(b.no)}">Open</button></div>`).join(""):"No bills yet. Tap New bill to create one.";
+if(!profile.bn)$("#recent").insertAdjacentHTML("afterbegin",'<p style="color:var(--r)"><b>Set up your Profile first</b> so it prints on every bill.</p>')}
+$("#recent").onclick=e=>{const n=e.target.dataset.v;if(n)openInv(bills.find(b=>b.no===n))};
+/* profile */
+$("#sp").onclick=async()=>{FIELDS.forEach(f=>profile[f[0]]=$("#f_"+f[0]).value.trim());sv("lc_prof",profile);try{await api("saveProfile",{profile});status(CFG.API?"Profile saved":"Saved on this phone")}catch(e){status("Save failed: "+e.message)}};
+/* billing */
+function newBill(){cur=1;items=[];["cn","cp","ca","cg","cs"].forEach(i=>$("#"+i).value="");$("#disc").value=0;$("#inter").checked=false;$("#dt").value=new Date().toISOString().slice(0,10);addItem()}
+function addItem(){items.push({d:"",h:"",q:1,r:0,g:+profile.bd||5});drawItems()}
+function drawItems(){$("#items").innerHTML=items.map((x,i)=>`<div class="it"><input class="d" list="pl" data-i="${i}" data-k="d" placeholder="Item (type article no. or name)" value="${esc(x.d)}"><input data-i="${i}" data-k="h" placeholder="HSN" value="${esc(x.h)}"><input data-i="${i}" data-k="q" type="number" min="1" placeholder="Qty" value="${x.q}"><input data-i="${i}" data-k="r" type="number" min="0" placeholder="Rate ₹" value="${x.r||""}"><input data-i="${i}" data-k="g" type="number" min="0" placeholder="GST %" value="${x.g}"><button class="rd" data-x="${i}" aria-label="Remove">✕</button></div>`).join("");totals()}
+$("#items").oninput=e=>{const i=e.target.dataset.i;if(i==null)return;const k=e.target.dataset.k,v=e.target.value;if(k==="d"){const p=products.find(p=>v===p.id+" — "+p.name);if(p){items[i].d=p.name+" ("+p.id+")";e.target.value=items[i].d;totals();return}items[i].d=v}else items[i][k]=k==="h"?v:+v||0;totals()};
+$("#items").onclick=e=>{const x=e.target.dataset.x;if(x!=null){items.splice(x,1);if(!items.length)items.push({d:"",h:"",q:1,r:0,g:+profile.bd||5});drawItems()}};
+$("#addI").onclick=addItem;$("#disc").oninput=totals;$("#inter").onchange=totals;
+$("#cs").oninput=e=>{const a=e.target.value.trim().toLowerCase(),b=(profile.bs||"").trim().toLowerCase();if(a&&b)$("#inter").checked=a!==b;totals()};
+function calc(){const rows=items.filter(x=>x.d||x.r).map(x=>({...x,t:x.q*x.r}));const sub=rows.reduce((s,x)=>s+x.t,0),d=Math.min(+$("#disc").value||0,sub),f=sub?(sub-d)/sub:0,gst=rows.reduce((s,x)=>s+x.t*x.g/100,0)*f,raw=sub-d+gst,total=Math.round(raw);return{rows,sub,disc:d,taxable:sub-d,gst,inter:$("#inter").checked,round:total-raw,total}}
+function totals(){const c=calc();$("#tot").innerHTML=`Subtotal ${m(c.sub)}<br>Discount −${m(c.disc)}<br>${c.inter?"IGST "+m(c.gst):"CGST "+m(c.gst/2)+" + SGST "+m(c.gst/2)}<br>Round off ${m(c.round)}<h3 style="margin-top:6px">Total ${m(c.total)}</h3>`}
+function build(no){const c=calc();return{...c,no,date:$("#dt").value,biz:{...profile},cust:{name:$("#cn").value.trim(),phone:$("#cp").value.trim(),addr:$("#ca").value.trim(),gstin:$("#cg").value.trim(),state:$("#cs").value.trim()}}}
+function ok(){if(!profile.bn){alert("Fill your Profile first");show("prof");return 0}if(!$("#cn").value.trim()){alert("Enter customer name");return 0}if(!calc().rows.length||calc().total<=0){alert("Add at least one item with a rate");return 0}return 1}
+$("#prev").onclick=()=>{if(ok())openInv(build("DRAFT"))};
+$("#save").onclick=async()=>{if(!ok())return;const b=build("");b.prefix=profile.bx||"LC";try{const r=await api("saveBill",{bill:b});b.no=r?r.no:b.prefix+"-"+String(bills.length+1).padStart(4,"0")}catch(e){alert("Could not save to Google Sheet: "+e.message);return}bills.push(b);sv("lc_bills",bills);cur=null;openInv(b)};
+function openInv(b){$("#ivb").innerHTML=inv(b);$("#iv").hidden=false;$("#iv").dataset.n=b.no}
+$("#ivx").onclick=()=>{$("#iv").hidden=true;if($("#iv").dataset.n!=="DRAFT"&&!$("#t-bill").hidden){newBill();show("home")}};$("#ivp").onclick=()=>print();
+$("#ivw").onclick=()=>{const b=bills.find(x=>x.no===$("#iv").dataset.n)||build("DRAFT");open("https://wa.me/"+wa(b.cust.phone)+"?text="+encodeURIComponent(`Hello ${b.cust.name}, your invoice ${b.no} from ${b.biz.bn||"Lone Crafts"} is ${m(b.total)}.\nThank you!${b.biz.bb?"\nPayment: "+b.biz.bb:""}`),"_blank")};
+function inv(b){const p=b.biz||profile,rows=b.rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.d)}${r.h?"<br><small>HSN "+esc(r.h)+"</small>":""}</td><td>${r.q}</td><td>${m(r.r)}</td><td>${r.g}%</td><td>${m(r.t)}</td></tr>`).join(""),tx=b.inter?`IGST: ${m(b.gst)}`:`CGST: ${m(b.gst/2)}<br>SGST: ${m(b.gst/2)}`;
+return`<h2>${esc(p.bn)}</h2><p>${esc(p.ba)}<br>${esc(p.bp)} ${esc(p.be)}<br>GSTIN: ${esc(p.bg)}</p><hr><p><b>TAX INVOICE</b> &nbsp; No: <b>${esc(b.no)}</b> &nbsp; Date: ${esc(b.date)}</p><p><b>Bill to:</b> ${esc(b.cust.name)}<br>${esc(b.cust.addr)}<br>${esc(b.cust.phone)} ${b.cust.gstin?"GSTIN: "+esc(b.cust.gstin):""}</p>
+<table><tr><th>#</th><th>Item</th><th>Qty</th><th>Rate</th><th>GST</th><th>Amount</th></tr>${rows}</table><p style="text-align:right">Subtotal: ${m(b.sub)}<br>Discount: −${m(b.disc)}<br>${tx}<br>Round off: ${m(b.round)}<br><b style="font-size:1.2em">Total: ${m(b.total)}</b></p><p>${words(b.total)}</p>${p.bb?"<p><b>Payment:</b> "+esc(p.bb)+"</p>":""}${p.bt?"<p><small>"+esc(p.bt)+"</small></p>":""}`}
+/* products */
+async function loadProducts(){try{const s=await sheet(CFG.PRODUCTS_CSV),i=s.col("article"),n=s.col("name","title"),c=s.col("categ"),p=s.col("photo","image"),k=s.col("stock","avail");products=s.rows.map(r=>({id:(r[i]||"").trim(),name:(r[n]||"").trim(),cat:r[c]||"",img:dr(r[p]),out:/^(no|out|sold)/i.test(r[k]||"")})).filter(x=>x.name).reverse();$("#pl").innerHTML=products.map(p=>`<option value="${esc(p.id+" — "+p.name)}">`).join("");drawProducts()}catch(e){$("#plist").textContent="Could not load products: "+e.message}}
+function drawProducts(){const t=$("#ps").value.toLowerCase(),l=products.filter(p=>(p.id+p.name+p.cat).toLowerCase().includes(t));$("#plist").innerHTML=l.length?l.map(p=>`<div class="row"><img src="${esc(p.img)}" alt="" onerror="this.style.visibility='hidden'"><div><b>${esc(p.name)}</b><br><small>${esc(p.id)} · ${esc(p.cat)}</small></div>${p.out?'<span class="tag">Out of stock</span>':""}</div>`).join(""):"No products found."}
+$("#ps").oninput=drawProducts;$("#rP").onclick=loadProducts;$("#addP").onclick=()=>CFG.PRODUCT_FORM?open(CFG.PRODUCT_FORM,"_blank"):alert("Put your Google Form link in CFG.PRODUCT_FORM");
+/* payments */
+async function loadPay(){if(!CFG.PAYMENTS_CSV){$("#paylist").textContent="Put your payments sheet CSV link in CFG.PAYMENTS_CSV.";return}try{const s=await sheet(CFG.PAYMENTS_CSV),a=s.col("amount"),b=s.col("bill"),d=s.col("date of","date"),t=s.col("time"),im=s.col("screenshot","upload","image","photo");pay=s.rows.map(r=>({k:(r[t]||"")+(r[b]||""),amt:parseFloat(String(r[a]||"").replace(/[^\d.]/g,""))||0,bill:(r[b]||"").trim(),date:r[d]||r[t]||"",img:r[im]||""})).reverse();drawPay();home()}catch(e){$("#paylist").textContent="Could not load payments: "+e.message}}
+function drawPay(){const t=$("#ys").value.toLowerCase(),v=ls("lc_v",{}),l=pay.filter(p=>p.bill.toLowerCase().includes(t));$("#paylist").innerHTML=l.length?l.map(p=>{const b=bills.find(x=>x.no.toLowerCase()===p.bill.toLowerCase()),mt=b?(Math.abs(b.total-p.amt)<1?`<span class="tag" style="background:#c9f0d8">Matches bill ${m(b.total)}</span>`:`<span class="tag" style="background:#f6d3cc">Bill total is ${m(b.total)}</span>`):'<span class="tag">Bill not found</span>';
+return`<div class="row"><a href="${esc(first(p.img))}" target="_blank" rel="noopener"><img src="${esc(dr(p.img))}" alt="screenshot" onerror="this.style.visibility='hidden'"></a><div><b>${m(p.amt)}</b> · ${esc(p.bill)}<br><small>${esc(p.date)}</small><br>${mt}</div><label style="margin:0"><input type="checkbox" style="width:auto" data-k="${esc(p.k)}" ${v[p.k]?"checked":""}> Verified</label></div>`}).join(""):"No payment records yet."}
+$("#paylist").onchange=e=>{const v=ls("lc_v",{});v[e.target.dataset.k]=e.target.checked;sv("lc_v",v)};$("#ys").oninput=drawPay;$("#rY").onclick=loadPay;
+if(CFG.UI_HASH&&sessionStorage.getItem("lc_k")){KEY=sessionStorage.getItem("lc_k");enter()}
+</script></body></html>
