@@ -13,10 +13,13 @@ nav button{flex:none;background:#fff;color:var(--ink);border:1.5px solid var(--l
 main{max-width:900px;margin:auto;padding:14px}.card{background:#fff;border:1px solid var(--l);border-radius:12px;padding:14px;margin-bottom:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.st b{display:block;font-size:1.35rem;color:var(--c)}
 label{font-size:.75rem;font-weight:700;color:#6b6475;display:block;margin-top:6px}h3{margin-bottom:6px}
-.it{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:6px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--l)}.it .d{grid-column:1/-1}
+.it{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:6px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--l)}.it .d{grid-column:1/-1}
 .row{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--l)}.row img{width:56px;height:56px;object-fit:cover;border-radius:8px;background:var(--l)}.row>div{flex:1;min-width:0}
 .bar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.bar input{flex:1;min-width:140px}.tag{font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--l)}
-#iv{position:fixed;inset:0;background:#fff;z-index:20;overflow:auto;padding:12px}.sheet{max-width:720px;margin:auto;font-size:13px}.sheet table{width:100%;border-collapse:collapse;margin:8px 0}.sheet td,.sheet th{border:1px solid #999;padding:4px 6px;text-align:left}
+#iv{position:fixed;inset:0;background:#fff;z-index:20;overflow:auto;padding:12px}.sheet{max-width:720px;margin:auto;font-size:13px}.sheet table{width:100%;border-collapse:collapse;margin:8px 0}.sheet td,.sheet th{border:1px solid #e3dcea;padding:6px 8px;text-align:left}.sheet th{background:#4b2e5a;color:#fff}.sheet tbody tr:nth-child(even) td{background:#f6f4f8}
+.ih{background:#4b2e5a;color:#fff;padding:16px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;gap:10px;border-bottom:4px solid #d98e04}.ih h2{font-family:Georgia,serif;font-size:22px}.ib{background:#d98e04;color:#1e1a24;font-weight:700;padding:3px 10px;border-radius:4px;display:inline-block}
+.tb{margin-left:auto;width:270px}.tb div{display:flex;justify-content:space-between;padding:3px 0}.tb .gt{background:#4b2e5a;color:#fff;padding:8px 10px;border-radius:6px;font-size:16px;font-weight:700;margin-top:4px}
+@page{margin:10mm}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media print{body>*:not(#iv){display:none!important}#iv .no{display:none}#iv{position:static;padding:0}}
 </style></head><body>
 <div id="lock" style="max-width:380px;margin:12vh auto;padding:18px"><div class="card"><h2>Lone Crafts Admin</h2>
@@ -25,13 +28,13 @@ label{font-size:.75rem;font-weight:700;color:#6b6475;display:block;margin-top:6p
 <div id="app" hidden>
 <header><b>Lone Crafts Admin</b><span><small id="sync"></small> <button class="o" id="out">Lock</button></span></header><nav id="nav"></nav>
 <main>
-<section id="t-home"><div class="grid" id="stats"></div><div class="card" style="margin-top:12px"><h3>Recent bills</h3><div id="recent"></div></div></section>
+<section id="t-home"><div class="grid" id="stats"></div><div class="card" style="margin-top:12px"><h3>Bills</h3><input id="bs" type="search" placeholder="Search by bill no. or customer"><div id="recent"></div></div></section>
 <section id="t-bill" hidden><div class="card"><h3>Customer</h3>
-<label>Name</label><input id="cn"><label>Phone (WhatsApp)</label><input id="cp" type="tel"><label>Address</label><textarea id="ca" rows="2"></textarea>
+<label>Name</label><input id="cn" list="cl"><datalist id="cl"></datalist><label>Phone (WhatsApp)</label><input id="cp" type="tel"><label>Address</label><textarea id="ca" rows="2"></textarea>
 <label>GSTIN (optional)</label><input id="cg"><label>State</label><input id="cs" placeholder="e.g. Jammu and Kashmir"><label>Date</label><input id="dt" type="date">
 <label><input id="inter" type="checkbox" style="width:auto"> Other state (use IGST)</label></div>
 <div class="card"><h3>Items</h3><datalist id="pl"></datalist><div id="items"></div><button class="o" id="addI">+ Add item</button>
-<label>Discount (₹ on whole bill)</label><input id="disc" type="number" min="0" value="0"></div>
+<div class="grid"><div><label>Discount (₹)</label><input id="disc" type="number" min="0" value="0"></div><div><label>GST % (on total)</label><input id="gr" type="number" min="0" value="5"></div></div></div>
 <div class="card" id="tot"></div><div class="bar"><button class="o" id="prev">Preview</button><button class="g" id="save">Save bill</button></div></section>
 <section id="t-prod" hidden><div class="bar"><input id="ps" type="search" placeholder="Search products"><button id="addP">+ Add product</button><button class="o" id="rP">Refresh</button></div><div class="card" id="plist"></div></section>
 <section id="t-pay" hidden><div class="bar"><input id="ys" type="search" placeholder="Search by bill number"><button class="o" id="rY">Refresh</button></div><div class="card" id="paylist"></div></section>
@@ -40,7 +43,7 @@ label{font-size:.75rem;font-weight:700;color:#6b6475;display:block;margin-top:6p
 <div id="iv" hidden><div class="no bar"><button class="o" id="ivx">Close</button><button id="ivp">Print / Save PDF</button><button class="g" id="ivw">Send on WhatsApp</button></div><div id="ivb" class="sheet"></div></div>
 <script>
 /* ===== EDIT THESE (see Code.gs for setup steps) ===== */
-const CFG={API:"",GOOGLE_CLIENT_ID:"",PRODUCT_FORM:"https://forms.gle/2zDtkswPH1f8fDqz5",
+const CFG={API:"https://script.google.com/macros/s/AKfycbwzpxX_A95XUxsn51c5d4wBY2IJ3q8B7MepUuojW4hv4X0tmrBTG1nRGNjjJAIWfhQ3UA/exec",GOOGLE_CLIENT_ID:"317204988789-vsh6i5hpuhkf7cgddthsuqs4tuvtq0g0.apps.googleusercontent.com",ADMIN_EMAIL:"lonesalis4@gmail.com",PRODUCT_FORM:"https://forms.gle/2zDtkswPH1f8fDqz5",
 PRODUCTS_CSV:"https://docs.google.com/spreadsheets/d/e/2PACX-1vR-JzRVAFn6o-3a1jyLlQV2az4yY2cOYSN8XH9ofBq0rkT2YQzS249HcTIUn6KN19mQSTvr_UkFHfJt/pub?output=csv",
 PAYMENTS_CSV:"https://docs.google.com/spreadsheets/d/1z2oh4VZC_JlcGIUp0AI_p6OIsRfTaCous-4kEFL_s8o/gviz/tq?tqx=out:csv",UI_HASH:"c23b4e81d2862fd5d6ec938051a847d6f3a3cf74e3ba3e60e24e4fbd7dfe2814"};
 /* ==================================================== */
@@ -49,7 +52,7 @@ const ls=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){retu
 const sha=async t=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,"0")).join("");
 const m=n=>"₹"+(+n||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2}),wa=n=>{n=String(n||"").replace(/\D/g,"");return n.length===10?"91"+n:n};
 let KEY="",profile=ls("lc_prof",{}),bills=ls("lc_bills",[]),products=[],pay=[],items=[],cur=null;
-const FIELDS=[["bn","Business name"],["ba","Address"],["bp","Phone"],["be","Email"],["bg","GSTIN"],["bs","State"],["bb","Bank / UPI details"],["bx","Bill prefix (e.g. LC)"],["bd","Default GST % (e.g. 5)"],["bt","Terms (printed on bill)"]];
+const FIELDS=[["bn","Business name"],["ba","Address"],["bp","Phone"],["be","Email"],["bg","GSTIN"],["bs","State"],["bb","Bank / UPI details"],["bx","Bill prefix (e.g. LC)"],["bd","Default GST % (e.g. 5)"],["bu","UPI ID (QR on bill)"],["bt","Terms (printed on bill)"]];
 function words(n){const a="One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen".split(" "),b="_ _ Twenty Thirty Forty Fifty Sixty Seventy Eighty Ninety".split(" "),t=n=>n<20?a[n-1]||"":b[n/10|0]+(n%10?" "+a[n%10-1]:""),h=n=>(n>99?a[(n/100|0)-1]+" Hundred"+(n%100?" ":""):"")+t(n%100);let s="";const cr=n/1e7|0,lk=(n/1e5|0)%100,th=(n/1e3|0)%100,r=n%1000;if(cr)s+=t(cr)+" Crore ";if(lk)s+=t(lk)+" Lakh ";if(th)s+=t(th)+" Thousand ";if(r)s+=h(r);return(s.trim()||"Zero")+" Rupees Only"}
 function csv(t){const R=[];let r=[],f="",q=0;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c=='"'){t[i+1]=='"'?(f+='"',i++):q=0}else f+=c}else if(c=='"')q=1;else if(c==','){r.push(f);f=""}else if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;r.push(f);R.push(r);r=[];f=""}else f+=c}if(f||r.length){r.push(f);R.push(r)}return R.filter(x=>x.some(y=>y.trim()))}
 async function sheet(u){const R=csv(await(await fetch(u,{cache:"no-cache"})).text());if(R.length<1)throw new Error("empty sheet");const h=R[0].map(x=>x.trim().toLowerCase());return{rows:R.slice(1),col:(...k)=>h.findIndex(x=>k.some(y=>x.includes(y)))}}
@@ -59,7 +62,7 @@ const status=t=>{$("#sync").textContent=t};
 /* login */
 $("#lf").onsubmit=async e=>{e.preventDefault();const p=$("#pw").value;if(!CFG.UI_HASH){$("#setup").textContent="FIRST-TIME SETUP\nPaste into admin.html as UI_HASH:\n"+await sha("ui:"+p)+"\n\nPaste into Code.gs as API_HASH:\n"+await sha("api:"+p);return}
 if(await sha("ui:"+p)!==CFG.UI_HASH){$("#err").textContent="Wrong passphrase";return}KEY=await sha("api:"+p);sessionStorage.setItem("lc_k",KEY);enter()};
-if(317204988789-vsh6i5hpuhkf7cgddthsuqs4tuvtq0g0.apps.googleusercontent.com){const g=document.createElement("script");g.src="https://accounts.google.com/gsi/client";g.onload=()=>{google.accounts.id.initialize({client_id:317204988789-vsh6i5hpuhkf7cgddthsuqs4tuvtq0g0.apps.googleusercontent.com,callback:r=>{KEY="g:"+r.credential;sessionStorage.setItem("lc_k",KEY);enter()}});google.accounts.id.renderButton($("#gbtn"),{theme:"outline",size:"large"})};document.head.appendChild(g)}
+if(CFG.GOOGLE_CLIENT_ID){const g=document.createElement("script");g.src="https://accounts.google.com/gsi/client";g.onload=()=>{google.accounts.id.initialize({client_id:CFG.GOOGLE_CLIENT_ID,callback:r=>{let em="";try{em=JSON.parse(atob(r.credential.split(".")[1].replace(/-/g,"+").replace(/_/g,"/"))).email}catch(e){}if(em!==CFG.ADMIN_EMAIL){$("#err").textContent="This Google account is not allowed";return}KEY="g:"+r.credential;sessionStorage.setItem("lc_k",KEY);enter()}});google.accounts.id.renderButton($("#gbtn"),{theme:"outline",size:"large"})};document.head.appendChild(g)}
 $("#out").onclick=()=>{sessionStorage.clear();location.reload()};
 const TABS=[["home","Home"],["bill","New bill"],["prod","Products"],["pay","Payments"],["prof","Profile"]];
 $("#nav").innerHTML=TABS.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("");
@@ -69,33 +72,42 @@ async function enter(){$("#lock").hidden=true;$("#app").hidden=false;$("#pf").in
 try{status("Syncing…");const d=await api("get");if(d){if(d.profile&&d.profile.bn)profile=d.profile;bills=d.bills||bills;sv("lc_prof",profile);sv("lc_bills",bills);FIELDS.forEach(f=>$("#f_"+f[0]).value=profile[f[0]]||"");status("Synced")}else status("Saving on this phone only")}catch(e){if(e.message==="Not allowed"){sessionStorage.clear();alert("Not allowed. Sign in again.");location.reload();return}status("Sync failed: "+e.message)}
 home();loadProducts();loadPay()}
 /* home */
-function home(){const mo=new Date().toISOString().slice(0,7),tot=bills.reduce((s,b)=>s+b.total,0),mt=bills.filter(b=>(b.date||"").startsWith(mo)).reduce((s,b)=>s+b.total,0),rec=pay.reduce((s,p)=>s+p.amt,0);
-$("#stats").innerHTML=[["Bills",bills.length],["Total billed",m(tot)],["This month",m(mt)],["Payments logged",m(rec)],["Products",products.length]].map(x=>`<div class="card st" style="margin:0"><small>${x[0]}</small><b>${x[1]}</b></div>`).join("");
-$("#recent").innerHTML=bills.length?bills.slice(-8).reverse().map(b=>`<div class="row"><div><b>${esc(b.no)}</b> · ${esc(b.cust.name)}<br><small>${esc(b.date)} · ${m(b.total)}</small></div><button class="o" data-v="${esc(b.no)}">Open</button></div>`).join(""):"No bills yet. Tap New bill to create one.";
+const paidOf=b=>pay.filter(p=>p.bill.toLowerCase()===b.no.toLowerCase()).reduce((s,p)=>s+p.amt,0);
+function home(){const mo=new Date().toISOString().slice(0,7),tot=bills.reduce((s,b)=>s+b.total,0),mt=bills.filter(b=>(b.date||"").startsWith(mo)).reduce((s,b)=>s+b.total,0),due=bills.reduce((s,b)=>s+Math.max(0,b.total-paidOf(b)),0),q=$("#bs").value.toLowerCase();
+$("#stats").innerHTML=[["Bills",bills.length],["Total billed",m(tot)],["This month",m(mt)],["Payment due",m(due)],["Products",products.length]].map(x=>`<div class="card st" style="margin:0"><small>${x[0]}</small><b>${x[1]}</b></div>`).join("");
+const l=bills.filter(b=>(b.no+b.cust.name).toLowerCase().includes(q));
+$("#recent").innerHTML=l.length?(q?l:l.slice(-8)).reverse().map(b=>{const p=paidOf(b),t=p>=b.total-1?["Paid","#c9f0d8"]:p>0?["Part paid","#fde7b0"]:["Unpaid","#f6d3cc"];return`<div class="row"><div><b>${esc(b.no)}</b> · ${esc(b.cust.name)}<br><small>${esc(b.date)} · ${m(b.total)}</small> <span class="tag" style="background:${t[1]}">${t[0]}</span></div><button class="o" data-v="${esc(b.no)}">Open</button></div>`}).join(""):"No bills found. Tap New bill to create one.";
 if(!profile.bn)$("#recent").insertAdjacentHTML("afterbegin",'<p style="color:var(--r)"><b>Set up your Profile first</b> so it prints on every bill.</p>')}
-$("#recent").onclick=e=>{const n=e.target.dataset.v;if(n)openInv(bills.find(b=>b.no===n))};
+$("#bs").oninput=home;$("#recent").onclick=e=>{const n=e.target.dataset.v;if(n)openInv(bills.find(b=>b.no===n))};
 /* profile */
 $("#sp").onclick=async()=>{FIELDS.forEach(f=>profile[f[0]]=$("#f_"+f[0]).value.trim());sv("lc_prof",profile);try{await api("saveProfile",{profile});status(CFG.API?"Profile saved":"Saved on this phone")}catch(e){status("Save failed: "+e.message)}};
 /* billing */
-function newBill(){cur=1;items=[];["cn","cp","ca","cg","cs"].forEach(i=>$("#"+i).value="");$("#disc").value=0;$("#inter").checked=false;$("#dt").value=new Date().toISOString().slice(0,10);addItem()}
-function addItem(){items.push({d:"",h:"",q:1,r:0,g:+profile.bd||5});drawItems()}
-function drawItems(){$("#items").innerHTML=items.map((x,i)=>`<div class="it"><input class="d" list="pl" data-i="${i}" data-k="d" placeholder="Item (type article no. or name)" value="${esc(x.d)}"><input data-i="${i}" data-k="h" placeholder="HSN" value="${esc(x.h)}"><input data-i="${i}" data-k="q" type="number" min="1" placeholder="Qty" value="${x.q}"><input data-i="${i}" data-k="r" type="number" min="0" placeholder="Rate ₹" value="${x.r||""}"><input data-i="${i}" data-k="g" type="number" min="0" placeholder="GST %" value="${x.g}"><button class="rd" data-x="${i}" aria-label="Remove">✕</button></div>`).join("");totals()}
+function newBill(){cur=1;custList();items=[];["cn","cp","ca","cg","cs"].forEach(i=>$("#"+i).value="");$("#disc").value=0;$("#gr").value=profile.bd||5;$("#inter").checked=false;$("#dt").value=new Date().toISOString().slice(0,10);addItem()}
+function addItem(){items.push({d:"",h:"",q:1,r:0});drawItems()}
+function drawItems(){$("#items").innerHTML=items.map((x,i)=>`<div class="it"><input class="d" list="pl" data-i="${i}" data-k="d" placeholder="Item (type article no. or name)" value="${esc(x.d)}"><input data-i="${i}" data-k="h" placeholder="HSN" value="${esc(x.h)}"><input data-i="${i}" data-k="q" type="number" min="1" placeholder="Qty" value="${x.q}"><input data-i="${i}" data-k="r" type="number" min="0" placeholder="Rate ₹" value="${x.r||""}"><button class="rd" data-x="${i}" aria-label="Remove">✕</button></div>`).join("");totals()}
 $("#items").oninput=e=>{const i=e.target.dataset.i;if(i==null)return;const k=e.target.dataset.k,v=e.target.value;if(k==="d"){const p=products.find(p=>v===p.id+" — "+p.name);if(p){items[i].d=p.name+" ("+p.id+")";e.target.value=items[i].d;totals();return}items[i].d=v}else items[i][k]=k==="h"?v:+v||0;totals()};
-$("#items").onclick=e=>{const x=e.target.dataset.x;if(x!=null){items.splice(x,1);if(!items.length)items.push({d:"",h:"",q:1,r:0,g:+profile.bd||5});drawItems()}};
-$("#addI").onclick=addItem;$("#disc").oninput=totals;$("#inter").onchange=totals;
+$("#items").onclick=e=>{const x=e.target.dataset.x;if(x!=null){items.splice(x,1);if(!items.length)items.push({d:"",h:"",q:1,r:0});drawItems()}};
+$("#addI").onclick=addItem;$("#disc").oninput=totals;$("#gr").oninput=totals;$("#inter").onchange=totals;
 $("#cs").oninput=e=>{const a=e.target.value.trim().toLowerCase(),b=(profile.bs||"").trim().toLowerCase();if(a&&b)$("#inter").checked=a!==b;totals()};
-function calc(){const rows=items.filter(x=>x.d||x.r).map(x=>({...x,t:x.q*x.r}));const sub=rows.reduce((s,x)=>s+x.t,0),d=Math.min(+$("#disc").value||0,sub),f=sub?(sub-d)/sub:0,gst=rows.reduce((s,x)=>s+x.t*x.g/100,0)*f,raw=sub-d+gst,total=Math.round(raw);return{rows,sub,disc:d,taxable:sub-d,gst,inter:$("#inter").checked,round:total-raw,total}}
-function totals(){const c=calc();$("#tot").innerHTML=`Subtotal ${m(c.sub)}<br>Discount −${m(c.disc)}<br>${c.inter?"IGST "+m(c.gst):"CGST "+m(c.gst/2)+" + SGST "+m(c.gst/2)}<br>Round off ${m(c.round)}<h3 style="margin-top:6px">Total ${m(c.total)}</h3>`}
+function calc(){const rows=items.filter(x=>x.d||x.r).map(x=>({...x,t:x.q*x.r})),sub=rows.reduce((s,x)=>s+x.t,0),d=Math.min(+$("#disc").value||0,sub),tx=sub-d,rate=+$("#gr").value||0,gst=tx*rate/100,raw=tx+gst,total=Math.round(raw);return{rows,sub,disc:d,taxable:tx,rate,gst,inter:$("#inter").checked,round:total-raw,total}}
+function totals(){const c=calc();$("#tot").innerHTML=`Subtotal ${m(c.sub)}<br>Discount −${m(c.disc)}<br>Taxable ${m(c.taxable)}<br>${c.inter?"IGST "+c.rate+"%: "+m(c.gst):"CGST "+c.rate/2+"%: "+m(c.gst/2)+" · SGST "+c.rate/2+"%: "+m(c.gst/2)}<br>Round off ${m(c.round)}<h3 style="margin-top:6px">Total ${m(c.total)}</h3>`}
+function custList(){const o={};bills.forEach(b=>o[b.cust.name]=b.cust);$("#cl").innerHTML=Object.keys(o).map(n=>`<option value="${esc(n)}">`).join("");return o}
+$("#cn").oninput=()=>{const c=custList()[$("#cn").value];if(c){$("#cp").value=c.phone||"";$("#ca").value=c.addr||"";$("#cg").value=c.gstin||"";$("#cs").value=c.state||"";$("#cs").dispatchEvent(new Event("input"))}};
 function build(no){const c=calc();return{...c,no,date:$("#dt").value,biz:{...profile},cust:{name:$("#cn").value.trim(),phone:$("#cp").value.trim(),addr:$("#ca").value.trim(),gstin:$("#cg").value.trim(),state:$("#cs").value.trim()}}}
 function ok(){if(!profile.bn){alert("Fill your Profile first");show("prof");return 0}if(!$("#cn").value.trim()){alert("Enter customer name");return 0}if(!calc().rows.length||calc().total<=0){alert("Add at least one item with a rate");return 0}return 1}
 $("#prev").onclick=()=>{if(ok())openInv(build("DRAFT"))};
 $("#save").onclick=async()=>{if(!ok())return;const b=build("");b.prefix=profile.bx||"LC";try{const r=await api("saveBill",{bill:b});b.no=r?r.no:b.prefix+"-"+String(bills.length+1).padStart(4,"0")}catch(e){alert("Could not save to Google Sheet: "+e.message);return}bills.push(b);sv("lc_bills",bills);cur=null;openInv(b)};
-function openInv(b){$("#ivb").innerHTML=inv(b);$("#iv").hidden=false;$("#iv").dataset.n=b.no}
+function openInv(b){$("#ivb").innerHTML=inv(b);$("#iv").hidden=false;$("#iv").dataset.n=b.no;const p=b.biz||profile;if(p.bu&&window.QRCode){new QRCode($("#qr"),{text:`upi://pay?pa=${encodeURIComponent(p.bu)}&pn=${encodeURIComponent(p.bn||"")}&am=${b.total}&cu=INR&tn=${encodeURIComponent(b.no)}`,width:90,height:90});$("#qr").insertAdjacentHTML("beforeend","<br><small>Scan to pay</small>")}}
 $("#ivx").onclick=()=>{$("#iv").hidden=true;if($("#iv").dataset.n!=="DRAFT"&&!$("#t-bill").hidden){newBill();show("home")}};$("#ivp").onclick=()=>print();
 $("#ivw").onclick=()=>{const b=bills.find(x=>x.no===$("#iv").dataset.n)||build("DRAFT");open("https://wa.me/"+wa(b.cust.phone)+"?text="+encodeURIComponent(`Hello ${b.cust.name}, your invoice ${b.no} from ${b.biz.bn||"Lone Crafts"} is ${m(b.total)}.\nThank you!${b.biz.bb?"\nPayment: "+b.biz.bb:""}`),"_blank")};
-function inv(b){const p=b.biz||profile,rows=b.rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.d)}${r.h?"<br><small>HSN "+esc(r.h)+"</small>":""}</td><td>${r.q}</td><td>${m(r.r)}</td><td>${r.g}%</td><td>${m(r.t)}</td></tr>`).join(""),tx=b.inter?`IGST: ${m(b.gst)}`:`CGST: ${m(b.gst/2)}<br>SGST: ${m(b.gst/2)}`;
-return`<h2>${esc(p.bn)}</h2><p>${esc(p.ba)}<br>${esc(p.bp)} ${esc(p.be)}<br>GSTIN: ${esc(p.bg)}</p><hr><p><b>TAX INVOICE</b> &nbsp; No: <b>${esc(b.no)}</b> &nbsp; Date: ${esc(b.date)}</p><p><b>Bill to:</b> ${esc(b.cust.name)}<br>${esc(b.cust.addr)}<br>${esc(b.cust.phone)} ${b.cust.gstin?"GSTIN: "+esc(b.cust.gstin):""}</p>
-<table><tr><th>#</th><th>Item</th><th>Qty</th><th>Rate</th><th>GST</th><th>Amount</th></tr>${rows}</table><p style="text-align:right">Subtotal: ${m(b.sub)}<br>Discount: −${m(b.disc)}<br>${tx}<br>Round off: ${m(b.round)}<br><b style="font-size:1.2em">Total: ${m(b.total)}</b></p><p>${words(b.total)}</p>${p.bb?"<p><b>Payment:</b> "+esc(p.bb)+"</p>":""}${p.bt?"<p><small>"+esc(p.bt)+"</small></p>":""}`}
+function inv(b){const p=b.biz||profile,R=b.rate!=null?b.rate:(b.taxable?Math.round(b.gst/b.taxable*100):0),rows=b.rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.d)}${r.h?"<br><small>HSN "+esc(r.h)+"</small>":""}</td><td>${r.q}</td><td>${m(r.r)}</td><td>${m(r.t)}</td></tr>`).join(""),tx=b.inter?`<div><span>IGST @ ${R}%</span><span>${m(b.gst)}</span></div>`:`<div><span>CGST @ ${R/2}%</span><span>${m(b.gst/2)}</span></div><div><span>SGST @ ${R/2}%</span><span>${m(b.gst/2)}</span></div>`;
+return`<div class="ih"><div><h2>${esc(p.bn)}</h2><small>${esc(p.ba)}<br>${esc(p.bp)} ${esc(p.be)}<br>GSTIN: ${esc(p.bg)}</small></div><div style="text-align:right"><span class="ib">TAX INVOICE</span><br><br>No: <b>${esc(b.no)}</b><br>Date: ${esc(b.date)}</div></div>
+<div style="padding:12px 4px"><small>BILL TO</small><br><b style="font-size:15px">${esc(b.cust.name)}</b><br>${esc(b.cust.addr)}<br>${esc(b.cust.phone)}${b.cust.gstin?" · GSTIN: "+esc(b.cust.gstin):""}</div>
+<table><tr><th>#</th><th>Item</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>${rows}</table>
+<div class="tb"><div><span>Subtotal</span><span>${m(b.sub)}</span></div>${b.disc?`<div><span>Discount</span><span>−${m(b.disc)}</span></div>`:""}<div><span>Taxable value</span><span>${m(b.taxable)}</span></div>${tx}<div><span>Round off</span><span>${m(b.round)}</span></div><div class="gt"><span>TOTAL</span><span>${m(b.total)}</span></div></div>
+<p style="margin-top:10px"><b>In words:</b> ${words(b.total)}</p>
+<div style="display:flex;gap:14px;align-items:flex-end;margin-top:12px;justify-content:space-between"><div>${p.bb?"<b>Payment details</b><br>"+esc(p.bb)+"<br>":""}${p.bt?"<small>"+esc(p.bt)+"</small>":""}</div><div id="qr" style="text-align:center"></div><div style="text-align:center;min-width:120px"><br><br>______________<br><small>Authorised signatory</small></div></div>
+<p style="text-align:center;border-top:2px solid #d98e04;margin-top:14px;padding-top:6px;color:#4b2e5a"><b>Thank you for shopping with ${esc(p.bn)}!</b></p>`}
 /* products */
 async function loadProducts(){try{const s=await sheet(CFG.PRODUCTS_CSV),i=s.col("article"),n=s.col("name","title"),c=s.col("categ"),p=s.col("photo","image"),k=s.col("stock","avail");products=s.rows.map(r=>({id:(r[i]||"").trim(),name:(r[n]||"").trim(),cat:r[c]||"",img:dr(r[p]),out:/^(no|out|sold)/i.test(r[k]||"")})).filter(x=>x.name).reverse();$("#pl").innerHTML=products.map(p=>`<option value="${esc(p.id+" — "+p.name)}">`).join("");drawProducts()}catch(e){$("#plist").textContent="Could not load products: "+e.message}}
 function drawProducts(){const t=$("#ps").value.toLowerCase(),l=products.filter(p=>(p.id+p.name+p.cat).toLowerCase().includes(t));$("#plist").innerHTML=l.length?l.map(p=>`<div class="row"><img src="${esc(p.img)}" alt="" onerror="this.style.visibility='hidden'"><div><b>${esc(p.name)}</b><br><small>${esc(p.id)} · ${esc(p.cat)}</small></div>${p.out?'<span class="tag">Out of stock</span>':""}</div>`).join(""):"No products found."}
@@ -106,4 +118,4 @@ function drawPay(){const t=$("#ys").value.toLowerCase(),v=ls("lc_v",{}),l=pay.fi
 return`<div class="row"><a href="${esc(first(p.img))}" target="_blank" rel="noopener"><img src="${esc(dr(p.img))}" alt="screenshot" onerror="this.style.visibility='hidden'"></a><div><b>${m(p.amt)}</b> · ${esc(p.bill)}<br><small>${esc(p.date)}</small><br>${mt}</div><label style="margin:0"><input type="checkbox" style="width:auto" data-k="${esc(p.k)}" ${v[p.k]?"checked":""}> Verified</label></div>`}).join(""):"No payment records yet."}
 $("#paylist").onchange=e=>{const v=ls("lc_v",{});v[e.target.dataset.k]=e.target.checked;sv("lc_v",v)};$("#ys").oninput=drawPay;$("#rY").onclick=loadPay;
 if(CFG.UI_HASH&&sessionStorage.getItem("lc_k")){KEY=sessionStorage.getItem("lc_k");enter()}
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script></body></html>
